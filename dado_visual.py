@@ -24,7 +24,7 @@ class DadoVisual:
         self.btn_lanzar.pack(pady=20)
 
     def cargar_imagenes(self):
-        for i in range(1, 7):
+        for i in range(0, 7):
             nombre_archivo = f"dado_{i}.jpg"
 
             if not os.path.exists(nombre_archivo):
@@ -33,7 +33,7 @@ class DadoVisual:
                 img = Image.open(nombre_archivo)
 
             img = img.resize((150, 150), Image.Resampling.LANCZOS)
-            self.imagenes_dado[i] = ImageTk.PhotoImage(img)
+            self.imagenes_dado.append(ImageTk.PhotoImage(img))
 
     def iniciar_giro(self):
         self.btn_lanzar.config(state=tk.DISABLED)
