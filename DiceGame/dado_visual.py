@@ -25,7 +25,11 @@ class DadoVisual:
 
     def cargar_imagenes(self):
         for i in range(0, 7):
+<<<<<<< HEAD:DiceGame/dado_visual.py
             nombre_archivo = f"DiceGame/Dices/dado_{i}.jpg"
+=======
+            nombre_archivo = f"dado_{i}.jpg"
+>>>>>>> 18cd0f18b04700b8034df68b8d48438df54e7304:dado_visual.py
 
             if not os.path.exists(nombre_archivo):
                 img=Image.new("RGB", (100, 100), color=(255, 255, 255))
