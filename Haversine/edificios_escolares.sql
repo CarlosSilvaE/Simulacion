@@ -69,8 +69,9 @@ CREATE TABLE `edificios_escolares`  (
   `tipo_asentamiento` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `numero_exterior` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `numero_interior` varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `latitud` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `longitud` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL
+  `latitud` decimal(10,7) NULL DEFAULT NULL,
+  `longitud` decimal(10,7) NULL DEFAULT NULL,
+  INDEX `idx_codigo_postal` (`codigo_postal`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 
@@ -13945,17 +13946,3 @@ INSERT INTO `edificios_escolares` VALUES ('05PII0005A', '9', 'ESCUELA', '400', '
 INSERT INTO `edificios_escolares` VALUES ('05PII0006Z', '9', 'ESCUELA', '400', 'DISCONTINUO', '06', 'IDIOMAS', '61', 'PARTICULAR', '1', 'OTRO NIVEL EDUCATIVO', '3', 'IDIOMAS', 'CENTRO DE IDIOMAS', '1', 'ALTA', '1', 'ESCOLARIZADO', '2009-09-10 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '500', 'LAGUNA', '035', 'TORREON', '0001', 'TORREÓN', '1', 'URBANO', 2704, '27100', 'GRANJAS SAN ISIDRO', '7', 'COLONIA', NULL, NULL, '25.558222222222', '-103.4357777777');
 
 SET FOREIGN_KEY_CHECKS = 1;
-
-use edificios_escolares;
-
-SELECT nombre, COUNT(*) AS total
-FROM edificios_escolares
-GROUP BY nombre
-HAVING COUNT(*) > 1;
-
-SELECT * FROM edificios_escolares WHERE nombre = 'SOR JUANA INES DE LA CRUZ';
-SELECT * FROM edificios_escolares limit 10;
-
-DESCRIBE edificios_escolares;
-
-SELECT latitud, longitud from edificios_escolares;

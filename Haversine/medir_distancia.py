@@ -18,12 +18,26 @@ class MedirDistancia:
         )
         self.lbl_title.pack(pady=10)
 
+        self.lbl_stats = tk.Label(
+            self.root,
+            text="Edificios revisados: 0 | Distancias calculadas: 0",
+            font=("Helvetica", 12, "bold")
+        )
+        self.lbl_stats.pack()
+
         self.lbl_subtitle = tk.Label(
             self.root,
             text="Edificios encontrados a 10 km o más de su código postal",
             font=("Helvetica", 12)
         )
         self.lbl_subtitle.pack(pady=10)
+
+        self.lbl_count = tk.Label(
+            self.root,
+            text="Edificios a 10 km o más: 0",
+            font=("Helvetica", 20, "bold")
+        )
+        self.lbl_count.pack()
 
         self.crear_tabla()
 
@@ -78,6 +92,7 @@ class MedirDistancia:
             * math.cos(math.radians(lat2))
             * math.sin(diferencia_lon / 2) ** 2
         )
+        h = max(0, min(1, h))
 
         c = 2 * math.atan2(
             math.sqrt(h),
@@ -104,6 +119,24 @@ class MedirDistancia:
             return None
 
 
+    def codigo_postal_valido(self, codigo_postal):
+        if codigo_postal is None:
+            return False
+
+        cp = str(codigo_postal).strip()
+
+        if cp == "":
+            return False
+
+        if cp == "00000":
+            return False
+
+        try:
+            return int(cp) != 0
+        except ValueError:
+            return True
+
+
     def cargar_datos(self):
         conn = conectar_edificios()
         cursor = conn.cursor()
@@ -118,7 +151,7 @@ class MedirDistancia:
                 c.lat,
                 c.lon
             FROM edificios_escolares.edificios_escolares AS e
-            INNER JOIN (
+            LEFT JOIN (
                 SELECT DISTINCT
                     cve_codpost,
                     lat,
@@ -127,31 +160,28 @@ class MedirDistancia:
                 WHERE
                     cve_codpost IS NOT NULL
                     AND TRIM(cve_codpost) <> ''
-                    AND cve_codpost <> '00000'
+                    AND TRIM(cve_codpost) <> '00000'
                     AND lat IS NOT NULL
                     AND lon IS NOT NULL
                     AND TRIM(lat) <> ''
                     AND TRIM(lon) <> ''
             ) AS c
                 ON e.codigo_postal = c.cve_codpost
-            WHERE
-                e.codigo_postal IS NOT NULL
-                AND TRIM(e.codigo_postal) <> ''
-                AND e.codigo_postal <> '00000'
-                AND e.latitud IS NOT NULL
-                AND e.longitud IS NOT NULL
-                AND TRIM(e.latitud) <> ''
-                AND TRIM(e.longitud) <> '';
+            ;
         """
 
         cursor.execute(consulta)
         registros = cursor.fetchall()
+        distancias_calculadas = 0
 
         for registro in registros:
 
             cct = registro[0]
             nombre = registro[1]
             codigo_postal = registro[2]
+
+            if not self.codigo_postal_valido(codigo_postal):
+                continue
 
             coordenada_edificio = self.coordenadas_validas(
                 registro[3],
@@ -176,6 +206,7 @@ class MedirDistancia:
                 lat_cp,
                 lon_cp
             )
+            distancias_calculadas += 1
 
             if distancia >= 10:
                 self.tabla.insert(
@@ -192,6 +223,13 @@ class MedirDistancia:
                         f"{distancia:.2f}"
                     )
                 )
+
+        self.lbl_stats.config(
+            text=f"Edificios revisados: {len(registros)} | Distancias calculadas: {distancias_calculadas}"
+        )
+        self.lbl_count.config(
+            text=f"Edificios a 10 km o más: {len(self.tabla.get_children())}"
+        )
 
         cursor.close()
         conn.close()

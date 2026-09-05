@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Georeferencias - Edificios fuera de su CP</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Edificios escolares a 10 km o más de su código postal</h1>
+        <div class="header-actions">
+          <p id="resumen">Cargando resultados...</p>
+          <button id="btn-geolocalizacion" type="button">Usar mi ubicación</button>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel map-panel">
+          <div id="map"></div>
+        </section>
+
+        <aside class="panel list-panel">
+          <h2>Listado</h2>
+          <div id="lista-resultados" class="lista"></div>
+        </aside>
+      </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>

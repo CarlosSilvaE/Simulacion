@@ -38,8 +38,8 @@ CREATE TABLE `cat_colonias`  (
   `cve_municipio` char(3) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `procesado` char(1) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `id_asenta_cpcons` varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `lat` varchar(40) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `lon` varchar(40) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `lat` decimal(10,7) NULL DEFAULT NULL,
+  `lon` decimal(10,7) NULL DEFAULT NULL,
   PRIMARY KEY (`cve_incr_cp`) USING BTREE,
   INDEX `idx_tipo_asentamiento`(`tipo_asentamiento`) USING BTREE,
   INDEX `idx_x`(`cve_codpost`, `nombre_colonia`, `cve_municipio`, `tipo_asentamiento`) USING BTREE
@@ -5807,7 +5807,3 @@ INSERT INTO `cat_colonias` VALUES (6719, '26284', 'Privadas de Santa Teresa', 'F
 INSERT INTO `cat_colonias` VALUES (6720, '00000', 'SIN COLONIA', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', '0', NULL, '0', '0');
 
 SET FOREIGN_KEY_CHECKS = 1;
-
-USE cat_colonias;
-SELECT * FROM cat_colonias limit 20;
-SELECT * FROM cat_colonias WHERE cve_codpost = '25800';
